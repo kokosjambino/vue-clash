@@ -1,7 +1,7 @@
 <script>
 import items from '@/seeders/items.js'
 
-import CardCharacter from '@/components/UI/CardCharacter.vue'
+import CardCharacter from '@/components/UI/Card/CardCharacter.vue'
 import CardStats from '@/components/UI/Card/CardStats.vue'
 
 import 'vue3-carousel/dist/carousel.css'
