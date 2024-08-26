@@ -2,7 +2,7 @@
 import items from '@/seeders/items.js'
 
 import CardCharacter from '@/components/UI/CardCharacter.vue'
-import CardStats from '@/components/UI/CardStats.vue'
+import CardStats from '@/components/UI/Card/CardStats.vue'
 
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'

@@ -1,6 +1,6 @@
 <script>
 import items from '@/seeders/items.js'
-import CardStats from '@/components/UI/CardStats.vue'
+import CardStats from '@/components/UI/Card/CardStats.vue'
 
 export default {
   components: {
