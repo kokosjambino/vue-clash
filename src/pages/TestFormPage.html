@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест загрузчика файлов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* Стили для формы */
+        .test-form h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-field {
+            margin-bottom: 20px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-field input[type="text"],
+        .form-field input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-field input[type="text"]:focus,
+        .form-field input[type="email"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .form-actions button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .submit-btn {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+
+        .reset-btn {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .preview-btn {
+            background-color: #6366f1;
+            color: white;
+        }
+
+        .preview-btn:hover {
+            background-color: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        .form-output {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .form-output h3 {
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .output-content {
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions button {
+                width: 100%;
+            }
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: #10b981;
+        }
+
+        .notification.error {
+            background-color: #ef4444;
+        }
+
+        .notification.info {
+            background-color: #3b82f6;
+        }
+
+        /* Инструкции */
+        .instructions {
+            background-color: #eff6ff;
+            border: 1px solid #dbeafe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .instructions h3 {
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+
+        .instructions ul {
+            color: #1e3a8a;
+            margin-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗂️ Тестирование загрузчика файлов</h1>
+            <p>Демонстрация работы компонентов FileUploader и MultiFileUploader</p>
+        </div>
+        <div class="content">
+            <div class="instructions">
+                <h3>📝 Инструкции по тестированию:</h3>
+                <ul>
+                    <li><strong>Аватар:</strong> Загрузите изображение (JPG, PNG, GIF) до 5MB</li>
+                    <li><strong>Документы:</strong> Загрузите до 5 документов (PDF, DOC, DOCX, TXT) до 10MB каждый</li>
+                    <li>Используйте drag & drop или кликните для выбора файлов</li>
+                    <li>Кликните на загруженный файл для замены</li>
+                    <li>Используйте кнопку "Предпросмотр данных" для просмотра всех данных формы</li>
+                </ul>
+            </div>
+            
+            <div id="test-form-container"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import TestForm from '../components/TestForm.js';
+
+        // Создание и инициализация формы
+        const testForm = new TestForm();
+        const container = document.getElementById('test-form-container');
+        
+        // Инициализация формы
+        testForm.init();
+        
+        // Рендер формы
+        testForm.render(container);
+
+        // Функция для показа уведомлений
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Дополнительные обработчики событий для демонстрации
+        testForm.onEvents('validSubmit', (data) => {
+            showNotification('✅ Форма успешно отправлена!', 'success');
+        });
+
+        testForm.onEvents('invalidSubmit', (data) => {
+            showNotification('❌ Ошибка валидации формы!', 'error');
+        });
+
+        testForm.onEvents('reset', () => {
+            showNotification('🔄 Форма очищена', 'info');
+        });
+
+        testForm.onEvents('fieldError', (data) => {
+            showNotification(`⚠️ Ошибка в поле "${data.field}": ${data.error.message}`, 'error');
+        });
+
+        // Экспорт в глобальную область для отладки
+        window.testForm = testForm;
+        
+        console.log('🚀 TestForm initialized and ready!');
+        console.log('💡 Tip: Use window.testForm to access form instance in console');
+    </script>
+</body>
+</html>
